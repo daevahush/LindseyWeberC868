@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="400.0" maxWidth="400.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="356.0" prefWidth="373.0" style="-fx-background-color: #f8f8ff;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.LogInController">
+    <children>
+        <TextField fx:id="UsernameTxt" layoutX="109.0" layoutY="99.0" prefHeight="38.0" prefWidth="170.0" promptText="Username" style="-fx-background-color: white;" />
+        <PasswordField fx:id="PasswordTxt" layoutX="109.0" layoutY="162.0" prefHeight="38.0" prefWidth="170.0" promptText="Password" style="-fx-background-color: white;" />
+        <Button fx:id="LogInButton" layoutX="270.0" layoutY="290.0" mnemonicParsing="false" onMouseClicked="#OnClickLogIn" style="-fx-background-color: #212122;" text="Log In" textFill="#aaf0d1">
+         <font>
+            <Font name="System Bold" size="16.0" />
+         </font></Button>
+        <Button fx:id="ExitButton" layoutX="73.0" layoutY="290.0" mnemonicParsing="false" onMouseClicked="#OnClickExit" style="-fx-background-color: #212124;" text="Exit" textFill="#aaf0d1">
+         <font>
+            <Font name="System Bold" size="16.0" />
+         </font></Button>
+    </children>
+</AnchorPane>
