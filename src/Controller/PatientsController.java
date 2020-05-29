@@ -13,7 +13,6 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -189,10 +188,10 @@ public class PatientsController implements Initializable {
             Patient.allPatients.clear();
 
             PatientTable.setItems(PatientUtilities.getAllPatients());
-            NameCol.setCellValueFactory(new PropertyValueFactory<>("customerName"));
+            NameCol.setCellValueFactory(new PropertyValueFactory<>("patientName"));
             AddressCol.setCellValueFactory(new PropertyValueFactory<>("address"));
             PhoneCol.setCellValueFactory(new PropertyValueFactory<>("phone"));
-            EmailCol.setCellValueFactory(new PropertyValueFactory<>("phone"));
+            EmailCol.setCellValueFactory(new PropertyValueFactory<>("email"));
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }

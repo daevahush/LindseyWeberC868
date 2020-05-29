@@ -14,15 +14,15 @@ public class PatientUtilities {
     static Connection connection = DBConnection.startConnection();
 
     //Get Patient ID
-    public static int getPatientID(String customerName, String address, String city) throws SQLException {
-        String query = "SELECT customerId FROM customer WHERE customerName = ? && addressId = ?;";
+    public static int getPatientID(String patientName, String address, String city) throws SQLException {
+        String query = "SELECT patientId FROM patient WHERE patientName = ? && addressId = ?;";
 
         //Create prepared statement
         DBQuery.setPreparedStatement(connection, query);
         PreparedStatement ps = DBQuery.getPreparedStatement();
 
         //Key value mappings
-        ps.setString(1, customerName);
+        ps.setString(1, patientName);
         ps.setInt(2, AddressUtilities.getAddressID(address, city));
 
         //Execute Statement
@@ -34,28 +34,30 @@ public class PatientUtilities {
         //Retrieve ResultSet values
         while(queryResults.next()) {
 
-            return queryResults.getInt("customerId");
+            return queryResults.getInt("patientId");
         }
 
         return -1;
     }
 
     //Insert new patient into patient table
-    public static void insertPatient(String customerName, int addressID) throws SQLException {
-        String insertStatement = "INSERT INTO customer(customerName, addressId, active, createDate, createdBy, lastUpdateBy) " +
-                "VALUES(?, ?, ?, ?, ?, ?);";
+    public static void insertPatient(String patientName, int addressID, String phone, String email) throws SQLException {
+        String insertStatement = "INSERT INTO patient(patientName, addressId, phone, email, active, createDate, createdBy, lastUpdateBy) " +
+                "VALUES(?, ?, ?, ?, ?, ?, ?, ?);";
 
         //Create prepared statement
         DBQuery.setPreparedStatement(connection, insertStatement);
         PreparedStatement ps = DBQuery.getPreparedStatement();
 
         //Key value mapping
-        ps.setString(1,customerName);
+        ps.setString(1,patientName);
         ps.setInt(2,addressID);
-        ps.setInt(3, 1);
-        ps.setString(4,SystemUtilities.getSystemDateTime());
-        ps.setString(5, User.getUserName());
-        ps.setString(6,User.getUserName());
+        ps.setString(3,phone);
+        ps.setString(4,email);
+        ps.setInt(5, 1);
+        ps.setString(6,SystemUtilities.getSystemDateTime());
+        ps.setString(7, User.getUserName());
+        ps.setString(8,User.getUserName());
 
         //Execute statement
         ps.execute();
@@ -69,19 +71,19 @@ public class PatientUtilities {
     }
 
     //Update patient
-    public static void updatePatient(int customerID, String customerName, int addressID) throws SQLException {
-        String updateStatement = "UPDATE customer SET customerName = ?, addressId = ?, lastUpdateBy = ?" +
-                "WHERE customerId = ?;";
+    public static void updatePatient(int patientID, String patientName, int addressID) throws SQLException {
+        String updateStatement = "UPDATE patient SET patientName = ?, addressId = ?, lastUpdateBy = ?" +
+                "WHERE patientId = ?;";
 
         //Create prepared statement
         DBQuery.setPreparedStatement(connection, updateStatement);
         PreparedStatement ps = DBQuery.getPreparedStatement();
 
         //Key value mapping
-        ps.setString(1,customerName);
+        ps.setString(1,patientName);
         ps.setInt(2,addressID);
         ps.setString(3,User.getUserName());
-        ps.setInt(4,customerID);
+        ps.setInt(4,patientID);
 
 
         //Execute statement
@@ -96,15 +98,15 @@ public class PatientUtilities {
     }
 
     //Delete patient
-    public static void deletePatient(int customerId) throws SQLException {
-        String deleteStatement = "DELETE FROM customer WHERE customerId = ?";
+    public static void deletePatient(int patientID) throws SQLException {
+        String deleteStatement = "DELETE FROM patient WHERE patientId = ?";
 
         //Create prepared statement
         DBQuery.setPreparedStatement(connection, deleteStatement);
         PreparedStatement ps = DBQuery.getPreparedStatement();
 
         //Key value mapping
-        ps.setInt(1, customerId);
+        ps.setInt(1, patientID);
 
         //Execute statement
         ps.execute();
@@ -117,14 +119,14 @@ public class PatientUtilities {
         }
     }
 
-    //Get Individual patient to update
-    public static ObservableList<Patient> getPatient(int customerId) throws SQLException {
-        String query = "SELECT customer.customerId, customer.customerName, " +
-                "address.addressId, address.address, address.address2, address.postalCode, address.phone, " +
-                "city.cityId, city.city, country.countryId, country.country FROM customer " +
-                "INNER JOIN address ON customer.addressId = address.addressId " +
+    //Get Individual patient to be updated
+    public static ObservableList<Patient> getPatient(int patientId) throws SQLException {
+        String query = "SELECT patient.patientId, patient.patientName, patient.phone, patient.email, " +
+                "address.addressId, address.address, address.address2, address.postalCode, " +
+                "city.cityId, city.city, country.countryId, country.country FROM patient " +
+                "INNER JOIN address ON patient.addressId = address.addressId " +
                 "INNER JOIN city ON address.cityId = city.cityId " +
-                "INNER JOIN country on city.countryId = country.countryId WHERE customerId= " + customerId;
+                "INNER JOIN country on city.countryId = country.countryId WHERE patientId= " + patientId;
 
         DBQuery.setPreparedStatement(connection, query);
         PreparedStatement ps = DBQuery.getPreparedStatement();
@@ -137,8 +139,10 @@ public class PatientUtilities {
 
         //Retrieve ResultSet values
         while(queryResults.next()) {
-            int customerID = queryResults.getInt("customerId");
-            String customerName = queryResults.getString("customerName");
+            int patientID = queryResults.getInt("patientId");
+            String patientName = queryResults.getString("patientName");
+            String phone = queryResults.getString("phone");
+            String email = queryResults.getString("email");
             int addressID = queryResults.getInt("addressId");
             String address = queryResults.getString("address");
             String address2 = queryResults.getString("address2");
@@ -147,21 +151,20 @@ public class PatientUtilities {
             int countryID = queryResults.getInt("countryId");
             String country = queryResults.getString("country");
             String postalCode = queryResults.getString("postalCode");
-            String phone = queryResults.getString("phone");
 
             //Add active customers to list
-            Patient.addUpdatePatient(new Patient(customerID, customerName, addressID, address, address2,
-                    cityID, city, countryID, country, postalCode, phone));
+            Patient.addUpdatePatient(new Patient(patientID, patientName, addressID, phone, email, address, address2,
+                    cityID, city, countryID, country, postalCode));
         }
 
         return Patient.updatePatient;
     }
 
     public static ObservableList<Patient> getAllPatients() throws SQLException {
-        String query = "SELECT customer.customerId, customer.customerName, " +
-                "address.addressId, address.address, address.address2, address.postalCode, address.phone, " +
-                "city.cityId, city.city, country.countryId, country.country FROM customer " +
-                "INNER JOIN address ON customer.addressId = address.addressId " +
+        String query = "SELECT patient.patientId, patient.patientName, patient.phone, patient.email,  " +
+                "address.addressId, address.address, address.address2, address.postalCode, " +
+                "city.cityId, city.city, country.countryId, country.country FROM patient " +
+                "INNER JOIN address ON patient.addressId = address.addressId " +
                 "INNER JOIN city ON address.cityId = city.cityId " +
                 "INNER JOIN country on city.countryId = country.countryId ;";
 
@@ -176,9 +179,11 @@ public class PatientUtilities {
 
         //Retrieve ResultSet values
         while(queryResults.next()) {
-            int customerID = queryResults.getInt("customerId");
-            String customerName = queryResults.getString("customerName");
+            int patientID = queryResults.getInt("patientId");
+            String patientName = queryResults.getString("patientName");
             int addressID = queryResults.getInt("addressId");
+            String phone = queryResults.getString("phone");
+            String email = queryResults.getString("email");
             String address = queryResults.getString("address");
             String address2 = queryResults.getString("address2");
             int cityID = queryResults.getInt("cityId");
@@ -186,11 +191,10 @@ public class PatientUtilities {
             int countryID = queryResults.getInt("countryId");
             String country = queryResults.getString("country");
             String postalCode = queryResults.getString("postalCode");
-            String phone = queryResults.getString("phone");
 
             //Add active appointments to list
-            Patient.addPatient(new Patient(customerID, customerName, addressID, address, address2,
-                    cityID, city, countryID, country, postalCode, phone));
+            Patient.addPatient(new Patient(patientID, patientName, addressID, phone, email, address, address2,
+                    cityID, city, countryID, country, postalCode));
         }
 
         return Patient.allPatients;

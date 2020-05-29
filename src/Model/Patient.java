@@ -21,11 +21,13 @@ public class Patient {
     public static ObservableList<Patient> allPatients = FXCollections.observableArrayList();
     public static ObservableList<Patient> updatePatient = FXCollections.observableArrayList();
 
-    public Patient(int patientID, String patientName, int addressID, String address, String address2,
-                   int cityID, String city, int countryID, String country, String postalCode, String phone) {
+    public Patient(int patientID, String patientName, int addressID, String phone, String email, String address, String address2,
+                   int cityID, String city, int countryID, String country, String postalCode) {
         this.patientID = patientID;
         this.patientName = patientName;
         this.addressID = addressID;
+        this.phone = phone;
+        this.email = email;
         this.address = address;
         this.address2 = address2;
         this.cityID = cityID;
@@ -33,7 +35,6 @@ public class Patient {
         this.countryID = countryID;
         this.country = country;
         this.postalCode = postalCode;
-        this.phone = phone;
     }
 
     public int getPatientID() {

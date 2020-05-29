@@ -12,6 +12,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
@@ -20,14 +21,23 @@ import java.util.ResourceBundle;
 
 public class AddPatientController implements Initializable {
 
+    Stage stage;
+    Parent scene;
+
+    @FXML
+    private Button CancelBtn;
+
+    @FXML
+    private Button SaveButton;
+
     @FXML
     private TextField NameTxt;
 
     @FXML
-    private TextField AddressTxt;
+    private TextField PhoneTxt;
 
     @FXML
-    private TextField NumberTxt;
+    private TextField AddressTxt;
 
     @FXML
     private TextField AddressTxt2;
@@ -42,13 +52,77 @@ public class AddPatientController implements Initializable {
     private TextField CountryTxt;
 
     @FXML
-    private Button CancelButton;
+    private TextField EmailTxt;
 
     @FXML
-    private Button SaveButton;
+    private AnchorPane SaveBtn;
 
-    Stage stage;
-    Parent scene;
+    @FXML
+    private Button ReportsBtn;
+
+    @FXML
+    private Button ExitBtn;
+
+    @FXML
+    private Button HomeBtn;
+
+    @FXML
+    private Button AppointmentsBtn;
+
+    @FXML
+    private Button PatientsBtn;
+
+    @FXML
+    private Button DoctorsBtn;
+
+
+    //Navigation menu buttons
+    @FXML
+    void OnClickHome(MouseEvent event) throws IOException {
+        stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+        scene = FXMLLoader.load(getClass().getResource("../View/MainScreen.fxml"));
+        stage.setScene(new Scene(scene));
+        stage.show();
+    }
+
+    @FXML
+    void OnClickAppointments(MouseEvent event) throws IOException {
+        stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+        scene = FXMLLoader.load(getClass().getResource("../View/Appointments.fxml"));
+        stage.setScene(new Scene(scene));
+        stage.show();
+    }
+
+    @FXML
+    void OnClickPatients(MouseEvent event) throws IOException {
+        stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+        scene = FXMLLoader.load(getClass().getResource("../View/Patients.fxml"));
+        stage.setScene(new Scene(scene));
+        stage.show();
+    }
+
+    @FXML
+    void OnClickDoctors(MouseEvent event) throws IOException {
+        stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+        scene = FXMLLoader.load(getClass().getResource("../View/Doctors.fxml"));
+        stage.setScene(new Scene(scene));
+        stage.show();
+    }
+
+    @FXML
+    void OnClickReports(MouseEvent event) throws IOException {
+        stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+        scene = FXMLLoader.load(getClass().getResource("../View/Reports.fxml"));
+        stage.setScene(new Scene(scene));
+        stage.show();
+    }
+
+    @FXML
+    void OnClickExit(MouseEvent event) {
+        Error.exitConfirmation();
+    }
+
+
 
     @FXML
     void OnClickCancel(MouseEvent event) {
@@ -59,7 +133,7 @@ public class AddPatientController implements Initializable {
         alert.showAndWait().filter(result -> result == ButtonType.OK).ifPresent(result -> {
             try {
                 stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-                scene = FXMLLoader.load(getClass().getResource("../View/MainScreen.fxml"));
+                scene = FXMLLoader.load(getClass().getResource("../View/Patients.fxml"));
                 stage.setScene(new Scene(scene));
                 stage.show();
             } catch(IOException | NullPointerException e) {
@@ -72,7 +146,8 @@ public class AddPatientController implements Initializable {
     @FXML
     void OnClickSave(MouseEvent event) throws IOException, SQLException {
         String name = NameTxt.getText();
-        String phoneNumber = NumberTxt.getText();
+        String number = PhoneTxt.getText();
+        String email = EmailTxt.getText();
         String address = AddressTxt.getText();
         String address2 = AddressTxt2.getText();
         String city = CityTxt.getText();
@@ -80,21 +155,19 @@ public class AddPatientController implements Initializable {
         String country = CountryTxt.getText();
 
         if(country.isEmpty() || city.isEmpty() || address.isEmpty() || postalCode.isEmpty() ||
-                phoneNumber.isEmpty() || name.isEmpty()) {
+                number.isEmpty() || name.isEmpty()) {
 
             Error.invalidValues();
 
         } else {
 
-//            Customer customer = new Customer();
-
             CountryUtilities.insertCountry(country);
             CityUtilities.insertCity(city, country);
-            AddressUtilities.insertAddress(address, address2, city, postalCode, phoneNumber);
-            PatientUtilities.insertPatient(name, AddressUtilities.getAddressID(address, city));
+            AddressUtilities.insertAddress(address, address2, city, postalCode);
+            PatientUtilities.insertPatient(name, AddressUtilities.getAddressID(address, city), number, email);
 
             stage = (Stage)((Button)event.getSource()).getScene().getWindow();
-            scene = FXMLLoader.load(getClass().getResource("../View/MainScreen.fxml"));
+            scene = FXMLLoader.load(getClass().getResource("../View/Patients.fxml"));
             stage.setScene(new Scene(scene));
             stage.show();
         }

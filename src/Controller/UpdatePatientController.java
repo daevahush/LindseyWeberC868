@@ -13,6 +13,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
@@ -21,11 +22,27 @@ import java.util.ResourceBundle;
 
 public class UpdatePatientController implements Initializable {
 
+    Stage stage;
+    Parent scene;
+
+    private int customerID;
+
+    //Initial Values
+    private String startCity;
+    private String startCountry;
+
+
+    @FXML
+    private Button CancelBtn;
+
+    @FXML
+    private Button SaveButton;
+
     @FXML
     private TextField NameTxt;
 
     @FXML
-    private TextField NumberTxt;
+    private TextField PhoneTxt;
 
     @FXML
     private TextField AddressTxt;
@@ -43,19 +60,76 @@ public class UpdatePatientController implements Initializable {
     private TextField CountryTxt;
 
     @FXML
-    private Button CancelButton;
+    private TextField EmailTxt;
 
     @FXML
-    private Button SaveButton;
+    private AnchorPane SaveBtn;
 
-    Stage stage;
-    Parent scene;
+    @FXML
+    private Button ReportsBtn;
 
-    private int customerID;
+    @FXML
+    private Button ExitBtn;
 
-    //Initial Values
-    private String startCity;
-    private String startCountry;
+    @FXML
+    private Button HomeBtn;
+
+    @FXML
+    private Button AppointmentsBtn;
+
+    @FXML
+    private Button PatientsBtn;
+
+    @FXML
+    private Button DoctorsBtn;
+
+
+    //Navigation menu buttons
+    @FXML
+    void OnClickHome(MouseEvent event) throws IOException {
+        stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+        scene = FXMLLoader.load(getClass().getResource("../View/MainScreen.fxml"));
+        stage.setScene(new Scene(scene));
+        stage.show();
+    }
+
+    @FXML
+    void OnClickAppointments(MouseEvent event) throws IOException {
+        stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+        scene = FXMLLoader.load(getClass().getResource("../View/Appointments.fxml"));
+        stage.setScene(new Scene(scene));
+        stage.show();
+    }
+
+    @FXML
+    void OnClickPatients(MouseEvent event) throws IOException {
+        stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+        scene = FXMLLoader.load(getClass().getResource("../View/Patients.fxml"));
+        stage.setScene(new Scene(scene));
+        stage.show();
+    }
+
+    @FXML
+    void OnClickDoctors(MouseEvent event) throws IOException {
+        stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+        scene = FXMLLoader.load(getClass().getResource("../View/Doctors.fxml"));
+        stage.setScene(new Scene(scene));
+        stage.show();
+    }
+
+    @FXML
+    void OnClickReports(MouseEvent event) throws IOException {
+        stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+        scene = FXMLLoader.load(getClass().getResource("../View/Reports.fxml"));
+        stage.setScene(new Scene(scene));
+        stage.show();
+    }
+
+    @FXML
+    void OnClickExit(MouseEvent event) {
+        Error.exitConfirmation();
+    }
+
 
     @FXML
     void OnClickCancel(MouseEvent event) {
@@ -79,7 +153,7 @@ public class UpdatePatientController implements Initializable {
     @FXML
     void OnClickSave(MouseEvent event) throws IOException, SQLException {
         String name = NameTxt.getText();
-        String phoneNumber = NumberTxt.getText();
+        String number = PhoneTxt.getText();
         String address = AddressTxt.getText();
         String address2 = AddressTxt2.getText();
         String city = CityTxt.getText();
@@ -87,32 +161,33 @@ public class UpdatePatientController implements Initializable {
         String country = CountryTxt.getText();
 
         if(country.isEmpty() || city.isEmpty() || address.isEmpty() || postalCode.isEmpty() ||
-                phoneNumber.isEmpty() || name.isEmpty()) {
+                number.isEmpty() || name.isEmpty()) {
 
             Error.invalidValues();
 
         } else {
             CountryUtilities.updateCountry(startCountry, country);
             CityUtilities.updateCity(startCity, city);
-            AddressUtilities.updateAddress(address, address2, city, postalCode, phoneNumber);
+            AddressUtilities.updateAddress(address, address2, city, postalCode);
             int addressID = AddressUtilities.getAddressID(address, city);
             System.out.println(addressID);
             PatientUtilities.updatePatient(customerID, name, addressID);
 
             stage = (Stage)((Button)event.getSource()).getScene().getWindow();
-            scene = FXMLLoader.load(getClass().getResource("../View/MainScreen.fxml"));
+            scene = FXMLLoader.load(getClass().getResource("../View/Patients.fxml"));
             stage.setScene(new Scene(scene));
             stage.show();
         }
 
     }
 
-    //    Get customer details from Main Screen Controller for which customer record to update
+
+    //    Get patient details from patient Controller for which patient record to update
     public void getPatientDetails(Patient patient, int customerId) {
         customerID = customerId;
 
         NameTxt.setText(patient.getPatientName());
-        NumberTxt.setText(patient.getPhone());
+        PhoneTxt.setText(patient.getPhone());
         AddressTxt.setText(patient.getAddress());
         AddressTxt2.setText(patient.getAddress2());
         CityTxt.setText(patient.getCity());
