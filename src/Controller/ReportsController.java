@@ -71,7 +71,7 @@ public class ReportsController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-        //Appointment Types
+        //Appointment Types TODO this whole entire screen...
         try {
             //Clears list of old data
             Appointment.appointmentTypes.clear();

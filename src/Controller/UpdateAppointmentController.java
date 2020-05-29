@@ -137,7 +137,7 @@ public class UpdateAppointmentController implements Initializable {
     }
 
     public Patient selectCustomer(int customerID) throws SQLException {
-        for(Patient patient : PatientUtilities.getCustomer(customerID)) {
+        for(Patient patient : PatientUtilities.getPatient(customerID)) {
             return patient;
         }
         return null;
@@ -162,7 +162,7 @@ public class UpdateAppointmentController implements Initializable {
             Patient.allPatients.clear();
 
             //Set Table
-            CustomerTable.setItems(PatientUtilities.getAllCustomers());
+            CustomerTable.setItems(PatientUtilities.getAllPatients());
             CustNameCol.setCellValueFactory(new PropertyValueFactory<>("customerName"));
             CustAddressCol.setCellValueFactory(new PropertyValueFactory<>("address"));
             CustPhoneCol.setCellValueFactory(new PropertyValueFactory<>("phone"));

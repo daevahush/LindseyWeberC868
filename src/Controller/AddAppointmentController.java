@@ -142,7 +142,7 @@ public class AddAppointmentController implements Initializable {
             //Clears list of old data
             Patient.allPatients.clear();
 
-            CustomerTable.setItems(PatientUtilities.getAllCustomers());
+            CustomerTable.setItems(PatientUtilities.getAllPatients());
             CustNameCol.setCellValueFactory(new PropertyValueFactory<>("customerName"));
             CustAddressCol.setCellValueFactory(new PropertyValueFactory<>("address"));
             CustPhoneCol.setCellValueFactory(new PropertyValueFactory<>("phone"));

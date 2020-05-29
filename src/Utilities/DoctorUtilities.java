@@ -2,6 +2,7 @@ package Utilities;
 
 import Database.DBConnection;
 import Database.DBQuery;
+import Model.Doctor;
 import Model.Patient;
 import Model.User;
 import javafx.collections.ObservableList;
@@ -10,12 +11,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class PatientUtilities {
+public class DoctorUtilities {
+
     static Connection connection = DBConnection.startConnection();
 
-    //Get Patient ID
-    public static int getPatientID(String customerName, String address, String city) throws SQLException {
-        String query = "SELECT customerId FROM customer WHERE customerName = ? && addressId = ?;";
+    //Get Doctor ID
+    public static int getDoctorID(String customerName, String address, String city) throws SQLException {
+        String query = "SELECT doctorId FROM doctor WHERE doctorName = ? && phone = ?;";
 
         //Create prepared statement
         DBQuery.setPreparedStatement(connection, query);
@@ -40,8 +42,8 @@ public class PatientUtilities {
         return -1;
     }
 
-    //Insert new patient into patient table
-    public static void insertPatient(String customerName, int addressID) throws SQLException {
+    //Insert new doctor into doctor table
+    public static void insertDoctor(String customerName, int addressID) throws SQLException {
         String insertStatement = "INSERT INTO customer(customerName, addressId, active, createDate, createdBy, lastUpdateBy) " +
                 "VALUES(?, ?, ?, ?, ?, ?);";
 
@@ -68,8 +70,8 @@ public class PatientUtilities {
         }
     }
 
-    //Update patient
-    public static void updatePatient(int customerID, String customerName, int addressID) throws SQLException {
+    //Update Doctor
+    public static void updateDoctor(int customerID, String customerName, int addressID) throws SQLException {
         String updateStatement = "UPDATE customer SET customerName = ?, addressId = ?, lastUpdateBy = ?" +
                 "WHERE customerId = ?;";
 
@@ -95,8 +97,8 @@ public class PatientUtilities {
         }
     }
 
-    //Delete patient
-    public static void deletePatient(int customerId) throws SQLException {
+    //Delete doctor
+    public static void deleteDoctor(int customerId) throws SQLException {
         String deleteStatement = "DELETE FROM customer WHERE customerId = ?";
 
         //Create prepared statement
@@ -117,8 +119,8 @@ public class PatientUtilities {
         }
     }
 
-    //Get Individual patient to update
-    public static ObservableList<Patient> getPatient(int customerId) throws SQLException {
+    //Get Individual doctor to update
+    public static ObservableList<Doctor> getDoctor(int customerId) throws SQLException {
         String query = "SELECT customer.customerId, customer.customerName, " +
                 "address.addressId, address.address, address.address2, address.postalCode, address.phone, " +
                 "city.cityId, city.city, country.countryId, country.country FROM customer " +
@@ -154,10 +156,10 @@ public class PatientUtilities {
                     cityID, city, countryID, country, postalCode, phone));
         }
 
-        return Patient.updatePatient;
+        return Doctor.updateDoctor;
     }
 
-    public static ObservableList<Patient> getAllPatients() throws SQLException {
+    public static ObservableList<Doctor> getAllDoctors() throws SQLException {
         String query = "SELECT customer.customerId, customer.customerName, " +
                 "address.addressId, address.address, address.address2, address.postalCode, address.phone, " +
                 "city.cityId, city.city, country.countryId, country.country FROM customer " +
@@ -193,7 +195,8 @@ public class PatientUtilities {
                     cityID, city, countryID, country, postalCode, phone));
         }
 
-        return Patient.allPatients;
+        return Doctor.allDoctors;
     }
 
 }
+

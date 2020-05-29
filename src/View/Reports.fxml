@@ -2,35 +2,12 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="606.0" prefWidth="721.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.ReportsController">
     <children>
         <Label layoutX="329.0" layoutY="31.0" style="-fx-font-size: 16;" text="Reports" />
-        <TableView fx:id="AppointmentTypesTable" layoutX="121.0" layoutY="84.0" prefHeight="120.0" prefWidth="468.0">
-            <columns>
-                <TableColumn fx:id="TypeCol" prefWidth="163.0" text="Type" />
-                <TableColumn fx:id="MonthCol" prefWidth="171.0" text="Month" />
-                <TableColumn fx:id="AmountCol" prefWidth="133.0" text="Amount" />
-            </columns>
-        </TableView>
         <Button fx:id="BackButton" layoutX="636.0" layoutY="552.0" mnemonicParsing="false" onMouseClicked="#OnClickBack" text="Back" />
-        <TableView fx:id="consultantTable" layoutX="127.0" layoutY="253.0" prefHeight="120.0" prefWidth="468.0">
-            <columns>
-                <TableColumn fx:id="ConsultantNameCol" prefWidth="161.0" text="Name" />
-                <TableColumn fx:id="ApptTimeCol" prefWidth="306.0" text="Appointment Times" />
-            </columns>
-        </TableView>
-        <TableView fx:id="TotalCustomerTable" layoutX="121.0" layoutY="414.0" prefHeight="120.0" prefWidth="468.0">
-            <columns>
-                <TableColumn fx:id="CountCol" prefWidth="87.0" text="Count" />
-                <TableColumn fx:id="CustomerNameCol" prefWidth="380.0" text="Customer Name" />
-            </columns>
-        </TableView>
-        <Label layoutX="31.0" layoutY="61.0" text="Appointment Types per Month" />
-        <Label layoutX="31.0" layoutY="227.0" text="Consultant Schedules" />
-        <Label layoutX="31.0" layoutY="397.0" text="Total Customers" />
+      <Label layoutX="329.0" layoutY="169.0" style="-fx-font-size: 16;" text="?" />
     </children>
 </AnchorPane>

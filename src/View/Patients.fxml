@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ButtonBar?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="444.0" prefWidth="816.0" style="-fx-background-color: #f8f8ff;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.MainScreenController">
+    <children>
+        <TableView fx:id="PatientTable" layoutX="224.0" layoutY="111.0" prefHeight="236.0" prefWidth="516.0" style="-fx-selection-bar: #aaf0d1;" stylesheets="@css.css">
+            <columns>
+                <TableColumn fx:id="NameCol" prefWidth="110.0" text="Patient Name" />
+                <TableColumn fx:id="AddressCol" prefWidth="111.0" text="Address" />
+                <TableColumn fx:id="PhoneCol" prefWidth="105.0" text="Phone" />
+                <TableColumn fx:id="EmailCol" prefWidth="189.0" text="Email" />
+            </columns>
+        </TableView>
+        <ButtonBar layoutX="53.0" layoutY="62.0" prefHeight="40.0" prefWidth="250.0" />
+        <ButtonBar layoutX="45.0" layoutY="368.0" prefHeight="40.0" prefWidth="200.0" />
+        <ButtonBar layoutX="426.0" layoutY="368.0" prefHeight="40.0" prefWidth="200.0" />
+        <AnchorPane layoutY="-5.0" minWidth="145.0" prefHeight="450.0" prefWidth="145.0" style="-fx-background-color: #323238;">
+            <children>
+                <Button fx:id="ReportsBtn" layoutY="186.0" maxHeight="40.0" maxWidth="145.0" minHeight="40.0" minWidth="145.0" mnemonicParsing="false" onMouseClicked="#OnClickReports" prefHeight="40.0" prefWidth="145.0" style="-fx-background-color: #323238; -fx-font-size: 16;" text="Reports" textFill="#aaf0d1">
+                    <font>
+                        <Font name="System Bold" size="14.0" />
+                    </font>
+                </Button>
+                <Button fx:id="ExitBtn" layoutY="405.0" maxHeight="40.0" maxWidth="145.0" minHeight="40.0" minWidth="145.0" mnemonicParsing="false" onMouseClicked="#OnClickExit" prefHeight="40.0" prefWidth="145.0" style="-fx-background-color: #323238; -fx-font-size: 16;" text="Exit" textFill="#aaf0d1">
+                    <font>
+                        <Font name="System Bold" size="14.0" />
+                    </font>
+                </Button>
+                <Button fx:id="HomeBtn" maxHeight="40.0" maxWidth="145.0" minHeight="40.0" minWidth="145.0" mnemonicParsing="false" onMouseClicked="#OnClickReports" prefHeight="40.0" prefWidth="145.0" style="-fx-background-color: #323238; -fx-font-size: 16;" text="Home" textFill="#aaf0d1">
+                    <font>
+                        <Font name="System Bold" size="14.0" />
+                    </font>
+                    <opaqueInsets>
+                        <Insets />
+                    </opaqueInsets>
+                </Button>
+                <Button fx:id="AppointmentsBtn" layoutY="46.0" maxHeight="40.0" maxWidth="145.0" minHeight="40.0" minWidth="145.0" mnemonicParsing="false" onMouseClicked="#OnClickAppointments" prefHeight="40.0" prefWidth="145.0" style="-fx-background-color: #323238; -fx-font-size: 16;" text="Appointments" textFill="#aaf0d1">
+                    <font>
+                        <Font name="System Bold" size="14.0" />
+                    </font>
+                </Button>
+                <Button fx:id="PatientsBtn" layoutY="93.0" maxHeight="40.0" maxWidth="145.0" minHeight="40.0" minWidth="145.0" mnemonicParsing="false" onMouseClicked="#OnClickPatients" prefHeight="40.0" prefWidth="145.0" style="-fx-background-color: #aaf0d1; -fx-font-size: 16;" text="Patients">
+                    <font>
+                        <Font name="System Bold" size="14.0" />
+                    </font>
+                </Button>
+                <Button fx:id="DoctorsBtn" layoutY="140.0" maxHeight="40.0" maxWidth="145.0" minHeight="40.0" minWidth="145.0" mnemonicParsing="false" onMouseClicked="#OnClickDoctors" prefHeight="40.0" prefWidth="145.0" style="-fx-background-color: #323238; -fx-font-size: 16;" text="Doctors" textFill="#aaf0d1">
+                    <font>
+                        <Font name="System Bold" size="14.0" />
+                    </font>
+                </Button>
+            </children>
+        </AnchorPane>
+        <AnchorPane layoutX="144.0" maxHeight="40.0" minHeight="40.0" prefHeight="40.0" prefWidth="672.0" style="-fx-background-color: #323238;">
+            <children>
+            <TextField fx:id="searchTxt" layoutX="476.0" layoutY="7.0" onAction="#onActionSearch" promptText="Search" />
+            </children>
+        </AnchorPane>
+        <AnchorPane layoutX="224.0" layoutY="347.0" maxHeight="40.0" minHeight="40.0" prefHeight="40.0" prefWidth="516.0" style="-fx-background-color: #323238;">
+            <children>
+                <Button fx:id="AddBtn" layoutX="72.0" maxHeight="35.0" minHeight="35.0" mnemonicParsing="false" onMouseClicked="#OnClickAdd" prefHeight="35.0" prefWidth="50.0" style="-fx-background-color: #323238; -fx-font-size: 16;" text="Add" textFill="#aaf0d1">
+                    <font>
+                        <Font name="System Bold" size="14.0" />
+                    </font>
+                </Button>
+                <Button fx:id="UpdateBtn" layoutX="222.0" maxHeight="35.0" minHeight="35.0" mnemonicParsing="false" onMouseClicked="#OnClickUpdate" prefHeight="35.0" prefWidth="72.0" style="-fx-background-color: #323238; -fx-font-size: 16; -fx-font-weight: bold;" text="Update" textFill="#aaf0d1">
+                    <font>
+                        <Font name="System Bold" size="14.0" />
+                    </font>
+                </Button>
+                <Button fx:id="DeleteButton" layoutX="364.0" maxHeight="35.0" minHeight="35.0" mnemonicParsing="false" onMouseClicked="#OnClickDelete" prefHeight="35.0" prefWidth="72.0" style="-fx-background-color: #323238; -fx-font-size: 16;" text="Delete" textFill="#aaf0d1">
+                    <font>
+                        <Font name="System Bold" size="14.0" />
+                    </font>
+                </Button>
+            </children>
+        </AnchorPane>
+    </children>
+</AnchorPane>

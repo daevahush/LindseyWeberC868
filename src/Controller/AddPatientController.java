@@ -18,7 +18,7 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
-public class AddCustomerController implements Initializable {
+public class AddPatientController implements Initializable {
 
     @FXML
     private TextField NameTxt;
@@ -91,7 +91,7 @@ public class AddCustomerController implements Initializable {
             CountryUtilities.insertCountry(country);
             CityUtilities.insertCity(city, country);
             AddressUtilities.insertAddress(address, address2, city, postalCode, phoneNumber);
-            PatientUtilities.insertCustomer(name, AddressUtilities.getAddressID(address, city));
+            PatientUtilities.insertPatient(name, AddressUtilities.getAddressID(address, city));
 
             stage = (Stage)((Button)event.getSource()).getScene().getWindow();
             scene = FXMLLoader.load(getClass().getResource("../View/MainScreen.fxml"));

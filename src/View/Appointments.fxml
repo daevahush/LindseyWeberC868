@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="445.0" prefWidth="816.0" style="-fx-background-color: #f8f8ff;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.MainScreenController">
+    <children>
+        <TableView fx:id="ApptTable" layoutX="222.0" layoutY="82.0" prefHeight="236.0" prefWidth="516.0" style="-fx-selection-bar: #aaf0d1;" stylesheets="@css.css">
+            <columns>
+                <TableColumn fx:id="DateCol" prefWidth="91.0" text="Date" />
+                <TableColumn fx:id="StartTimeCol" prefWidth="91.0" text="Start Time" />
+                <TableColumn fx:id="EndTimeCol" prefWidth="91.0" text="End Time" />
+                <TableColumn fx:id="DoctorCol" prefWidth="111.0" text="Doctor" />
+                <TableColumn fx:id="PatientCol" prefWidth="132.0" text="Patient Name" />
+            </columns>
+        </TableView>
+        <AnchorPane layoutY="-5.0" minWidth="145.0" prefHeight="450.0" prefWidth="145.0" style="-fx-background-color: #323238;">
+            <children>
+                <Button fx:id="ReportsBtn" layoutY="186.0" maxHeight="40.0" maxWidth="145.0" minHeight="40.0" minWidth="145.0" mnemonicParsing="false" onMouseClicked="#OnClickReports" prefHeight="40.0" prefWidth="145.0" style="-fx-background-color: #323238; -fx-font-size: 16;" text="Reports" textFill="#aaf0d1">
+                    <font>
+                        <Font name="System Bold" size="14.0" />
+                    </font>
+                </Button>
+                <Button fx:id="ExitBtn" layoutY="405.0" maxHeight="40.0" maxWidth="145.0" minHeight="40.0" minWidth="145.0" mnemonicParsing="false" onMouseClicked="#OnClickExit" prefHeight="40.0" prefWidth="145.0" style="-fx-background-color: #323238; -fx-font-size: 16;" text="Exit" textFill="#aaf0d1">
+                    <font>
+                        <Font name="System Bold" size="14.0" />
+                    </font>
+                </Button>
+                <Button fx:id="HomeBtn" maxHeight="40.0" maxWidth="145.0" minHeight="40.0" minWidth="145.0" mnemonicParsing="false" onMouseClicked="#OnClickHome" prefHeight="40.0" prefWidth="145.0" style="-fx-background-color: #323238; -fx-font-size: 16;" text="Home" textFill="#aaf0d1">
+                    <font>
+                        <Font name="System Bold" size="14.0" />
+                    </font>
+                    <opaqueInsets>
+                        <Insets />
+                    </opaqueInsets>
+                </Button>
+                <Button fx:id="AppointmentsBtn" layoutY="46.0" maxHeight="40.0" maxWidth="145.0" minHeight="40.0" minWidth="145.0" mnemonicParsing="false" onMouseClicked="#OnClickAppointments" prefHeight="40.0" prefWidth="145.0" style="-fx-background-color: #aaf0d1; -fx-font-size: 16;" text="Appointments">
+                    <font>
+                        <Font name="System Bold" size="14.0" />
+                    </font>
+                </Button>
+                <Button fx:id="PatientsBtn" layoutY="93.0" maxHeight="40.0" maxWidth="145.0" minHeight="40.0" minWidth="145.0" mnemonicParsing="false" onMouseClicked="#OnClickPatients" prefHeight="40.0" prefWidth="145.0" style="-fx-background-color: #323238; -fx-font-size: 16;" text="Patients" textFill="#aaf0d1">
+                    <font>
+                        <Font name="System Bold" size="14.0" />
+                    </font>
+                </Button>
+                <Button fx:id="DoctorsBtn" layoutY="140.0" maxHeight="40.0" maxWidth="145.0" minHeight="40.0" minWidth="145.0" mnemonicParsing="false" onMouseClicked="#OnClickDoctors" prefHeight="40.0" prefWidth="145.0" style="-fx-background-color: #323238; -fx-font-size: 16;" text="Doctors" textFill="#aaf0d1">
+                    <font>
+                        <Font name="System Bold" size="14.0" />
+                    </font>
+                </Button>
+            </children>
+        </AnchorPane>
+        <AnchorPane layoutX="144.0" maxHeight="40.0" minHeight="40.0" prefHeight="40.0" prefWidth="672.0" style="-fx-background-color: #323238;">
+            <children>
+                <Button fx:id="AllApptsBtn" alignment="CENTER" layoutX="81.0" layoutY="-6.0" maxHeight="40.0" minHeight="40.0" mnemonicParsing="false" onMouseClicked="#OnClickAllAppts" prefHeight="40.0" prefWidth="50.0" style="-fx-background-color: #323238; -fx-font-size: 16;" text="All" textFill="#aaf0d1">
+                    <font>
+                        <Font name="System Bold" size="14.0" />
+                    </font>
+                </Button>
+                <Button fx:id="MonthlyApptsBtn" alignment="CENTER" layoutX="174.0" layoutY="-6.0" maxHeight="40.0" minHeight="40.0" mnemonicParsing="false" onMouseClicked="#OnClickMonthlyAppts" prefHeight="40.0" prefWidth="84.0" style="-fx-background-color: #323238; -fx-font-size: 16;" text="Monthly" textFill="#aaf0d1">
+                    <font>
+                        <Font name="System Bold" size="14.0" />
+                    </font>
+                </Button>
+                <Button fx:id="WeeklyApptsBtn" alignment="CENTER" layoutX="294.0" layoutY="-6.0" maxHeight="40.0" minHeight="40.0" minWidth="61.0" mnemonicParsing="false" onMouseClicked="#OnClickWeeklyAppts" prefHeight="40.0" prefWidth="84.0" style="-fx-background-color: #323238; -fx-font-size: 16;" text="Weekly" textFill="#aaf0d1">
+                    <font>
+                        <Font name="System Bold" size="14.0" />
+                    </font>
+                </Button>
+            <TextField fx:id="SearchTxt" layoutX="476.0" layoutY="7.0" onAction="#onActionSearch" promptText="Search" />
+            </children>
+        </AnchorPane>
+        <AnchorPane layoutX="222.0" layoutY="318.0" maxHeight="40.0" minHeight="40.0" prefHeight="40.0" prefWidth="516.0" style="-fx-background-color: #323238;">
+            <children>
+                <Button fx:id="AddApptBtn" layoutX="72.0" maxHeight="35.0" minHeight="35.0" mnemonicParsing="false" onMouseClicked="#OnClickAddAppt" prefHeight="35.0" prefWidth="50.0" style="-fx-background-color: #323238; -fx-font-size: 16;" text="Add" textFill="#aaf0d1">
+                    <font>
+                        <Font name="System Bold" size="14.0" />
+                    </font>
+                </Button>
+                <Button fx:id="UpdateApptBtn" layoutX="222.0" maxHeight="35.0" minHeight="35.0" mnemonicParsing="false" onMouseClicked="#OnClickUpdateAppt" prefHeight="35.0" prefWidth="72.0" style="-fx-background-color: #323238; -fx-font-size: 16; -fx-font-weight: bold;" text="Update" textFill="#aaf0d1">
+                    <font>
+                        <Font name="System Bold" size="14.0" />
+                    </font>
+                </Button>
+                <Button fx:id="DeleteApptBtn" layoutX="364.0" maxHeight="35.0" minHeight="35.0" mnemonicParsing="false" onMouseClicked="#OnClickDeleteAppt" prefHeight="35.0" prefWidth="72.0" style="-fx-background-color: #323238; -fx-font-size: 16;" text="Delete" textFill="#aaf0d1">
+                    <font>
+                        <Font name="System Bold" size="14.0" />
+                    </font>
+                </Button>
+            </children>
+        </AnchorPane>
+    </children>
+</AnchorPane>

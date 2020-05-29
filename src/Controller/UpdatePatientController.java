@@ -19,7 +19,7 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
-public class UpdateCustomerController implements Initializable {
+public class UpdatePatientController implements Initializable {
 
     @FXML
     private TextField NameTxt;
@@ -97,7 +97,7 @@ public class UpdateCustomerController implements Initializable {
             AddressUtilities.updateAddress(address, address2, city, postalCode, phoneNumber);
             int addressID = AddressUtilities.getAddressID(address, city);
             System.out.println(addressID);
-            PatientUtilities.updateCustomer(customerID, name, addressID);
+            PatientUtilities.updatePatient(customerID, name, addressID);
 
             stage = (Stage)((Button)event.getSource()).getScene().getWindow();
             scene = FXMLLoader.load(getClass().getResource("../View/MainScreen.fxml"));
@@ -108,7 +108,7 @@ public class UpdateCustomerController implements Initializable {
     }
 
     //    Get customer details from Main Screen Controller for which customer record to update
-    public void getCustomerDetails(Patient patient, int customerId) {
+    public void getPatientDetails(Patient patient, int customerId) {
         customerID = customerId;
 
         NameTxt.setText(patient.getPatientName());

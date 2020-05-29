@@ -13,7 +13,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("/View/LogIn.fxml"));
-        //        primaryStage.getStyleSheets().add("/CSS/css.css");
+//                primaryStage.getStyleSheets().add("/CSS/css.css");
         primaryStage.setScene(new Scene(root, 400, 400));
         primaryStage.setTitle("Charlie Foxtrot Appointment Scheduler");
         primaryStage.show();
