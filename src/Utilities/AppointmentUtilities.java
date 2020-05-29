@@ -42,16 +42,16 @@ public class AppointmentUtilities {
 
 
     //Insert new Appointment into Appointment table
-    public static void insertAppointment(int patientID, String title, String description, String patientName,
+    public static void insertAppointment(int patientID, int doctorID, String title, String description, String patientName,
                                          String type, String start, String end) throws SQLException {
 
         //Convert user provided dates and times to UTC
         String startToUTC = SystemUtilities.toUTC(start);
         String endToUTC = SystemUtilities.toUTC(end);
 
-        String insertStatement = "INSERT INTO appointment(patientId, doctorId, userId, title, description, location, " +
-                "contact, type, url, start, end, createDate, createdBy, lastUpdateBy) " +
-                "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+        String insertStatement = "INSERT INTO appointment(patientId, doctorId, userId, title, description,  " +
+                "contact, type, start, end, createDate, createdBy, lastUpdateBy) " +
+                "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
 
         //Create prepared statement
         DBQuery.setPreparedStatement(connection, insertStatement);
@@ -59,16 +59,17 @@ public class AppointmentUtilities {
 
         //Key value mapping
         ps.setInt(1, patientID);
-        ps.setInt(2, SystemUtilities.getUserID(User.getUserName()));
-        ps.setString(3,title);
-        ps.setString(4,description);
+        ps.setInt(2, doctorID);
+        ps.setInt(3, SystemUtilities.getUserID(User.getUserName()));
+        ps.setString(4,title);
+        ps.setString(5,description);
         ps.setString(6, patientName);
         ps.setString(7, type);
-        ps.setString(9,startToUTC);
-        ps.setString(10,endToUTC);
-        ps.setString(11, SystemUtilities.getSystemDateTime());
+        ps.setString(8,startToUTC);
+        ps.setString(9,endToUTC);
+        ps.setString(10, SystemUtilities.getSystemDateTime());
+        ps.setString(11,User.getUserName());
         ps.setString(12,User.getUserName());
-        ps.setString(13,User.getUserName());
 
         //Execute statement
         ps.execute();
@@ -82,7 +83,7 @@ public class AppointmentUtilities {
     }
 
     //Update Appointment
-    public static void updateAppointment(int customerID, String title, String description, String location, String customerName,
+    public static void updateAppointment(int patientID, int doctorID, String title, String description, String patientName,
                                          String type, String start, String end, int appointmentID) throws SQLException {
 
         //Convert user provided dates and times to UTC
@@ -90,25 +91,24 @@ public class AppointmentUtilities {
         String endToUTC = SystemUtilities.toUTC(end);
 
 
-        String updateStatement = "UPDATE appointment SET customerId = ?, title = ?, description = ?, location = ?, " +
-                "contact = ?, type = ?, url = ?, start = ?, end = ?, lastUpdateBy = ? WHERE appointmentId = ?;";
+        String updateStatement = "UPDATE appointment SET patientId = ?, doctorId = ?, title = ?, description = ?, " +
+                "contact = ?, type = ?, start = ?, end = ?, lastUpdateBy = ? WHERE appointmentId = ?;";
 
         //Create prepared statement
         DBQuery.setPreparedStatement(connection, updateStatement);
         PreparedStatement ps = DBQuery.getPreparedStatement();
 
         //Key value mapping
-        ps.setInt(1, customerID);
-        ps.setString(2,title);
-        ps.setString(3,description);
-        ps.setString(4, location);
-        ps.setString(5, customerName);
+        ps.setInt(1, patientID);
+        ps.setInt(2, doctorID);
+        ps.setString(3,title);
+        ps.setString(4,description);
+        ps.setString(5, patientName);
         ps.setString(6, type);
-        ps.setString(7, "URL");
-        ps.setString(8,startToUTC);
-        ps.setString(9,endToUTC);
-        ps.setString(10,User.getUserName());
-        ps.setInt(11, appointmentID);
+        ps.setString(7,startToUTC);
+        ps.setString(8,endToUTC);
+        ps.setString(9,User.getUserName());
+        ps.setInt(10, appointmentID);
 
         //Execute statement
         ps.execute();
@@ -144,9 +144,16 @@ public class AppointmentUtilities {
     //Get all Appointments
     public static ObservableList<Appointment> getAllAppointment() throws SQLException {
 
-        String query = "SELECT appointment.appointmentId, customer.customerId, user.userId, appointment.title, appointment.description, " +
-                "appointment.location, appointment.contact, appointment.type, appointment.url, appointment.start, appointment.end, " +
-                "customer.customerName FROM appointment INNER JOIN customer ON appointment.customerId = customer.customerId " +
+//        String query = "SELECT appointment.appointmentId, patient.patientId, doctor.doctorId, user.userId, appointment.title, appointment.description, " +
+//                "appointment.contact, appointment.type, appointment.start, appointment.end, " +
+//                "patient.patientName, doctor.doctorName FROM appointment INNER JOIN patient ON appointment.patientId = patient.patientId " +
+//                "INNER JOIN doctor ON appointment.doctorId = doctor.doctorId " +
+//                "INNER JOIN user ON appointment.userId = user.userId";
+
+        String query = "SELECT appointment.appointmentId, patient.patientId, doctor.doctorId, user.userId, appointment.title, " +
+        "appointment.description, appointment.contact, appointment.type, appointment.start, appointment.end, " +
+                "patient.patientName, doctor.doctorName FROM appointment INNER JOIN patient ON appointment.patientId = patient.patientId " +
+                "INNER JOIN doctor ON appointment.doctorId = doctor.doctorId " +
                 "INNER JOIN user ON appointment.userId = user.userId";
 
         DBQuery.setPreparedStatement(connection, query);
@@ -162,7 +169,9 @@ public class AppointmentUtilities {
         while(queryResults.next()) {
             int appointmentID = queryResults.getInt("appointmentId");
             int patientID = queryResults.getInt("patientId");
+            String patientName = queryResults.getString("patientName");
             int doctorID = queryResults.getInt("doctorId");
+            String doctorName = queryResults.getString("doctorName");
             int userID = queryResults.getInt("userId");
             String title = queryResults.getString("title");
             String description = queryResults.getString("description");
@@ -176,7 +185,7 @@ public class AppointmentUtilities {
             String end = SystemUtilities.toUserTime(dbEnd);
 
             //Add active appointments to list
-            Appointment.addAppointment(new Appointment(appointmentID, patientID, doctorID, userID, title,
+            Appointment.addAppointment(new Appointment(appointmentID, patientID, patientName, doctorID, doctorName, userID, title,
                     description, contact, type, start, end));
         }
 
@@ -188,7 +197,13 @@ public class AppointmentUtilities {
         LocalDate betweenStart = LocalDate.now();
         LocalDate betweenEnd = LocalDate.now().plusWeeks(1);
 
-        String query = "SELECT * FROM appointment WHERE start >= '" + betweenStart + "' AND start <= '" + betweenEnd + "'";
+        String query = "SELECT appointment.appointmentId, patient.patientId, doctor.doctorId, user.userId, appointment.title, " +
+                "appointment.description, appointment.contact, appointment.type, appointment.start, appointment.end, patient.patientName, " +
+                "doctor.doctorName FROM appointment INNER JOIN patient ON appointment.patientId = patient.patientId " +
+                "INNER JOIN doctor ON appointment.doctorId = doctor.doctorId INNER JOIN user ON appointment.userId = user.userId " +
+                "WHERE start >= '" + betweenStart + "' AND start <= '" + betweenEnd + "'";
+
+//        String query = "SELECT * FROM appointment WHERE start >= '" + betweenStart + "' AND start <= '" + betweenEnd + "'";
 
         DBQuery.setPreparedStatement(connection, query);
         PreparedStatement ps = DBQuery.getPreparedStatement();
@@ -202,14 +217,15 @@ public class AppointmentUtilities {
         //Retrieve ResultSet values
         while(queryResults.next()) {
             int appointmentID = queryResults.getInt("appointmentId");
-            int customerID = queryResults.getInt("customerId");
+            int patientID = queryResults.getInt("patientId");
+            String patientName = queryResults.getString("patientName");
             int doctorID = queryResults.getInt("doctorId");
+            String doctorName = queryResults.getString("doctorName");
             int userID = queryResults.getInt("userId");
             String title = queryResults.getString("title");
             String description = queryResults.getString("description");
             String contact = queryResults.getString("contact");
             String type = queryResults.getString("type");
-            String url = queryResults.getString("url");
 
             Timestamp dbStart = queryResults.getTimestamp("start");
             Timestamp dbEnd = queryResults.getTimestamp("end");
@@ -218,7 +234,7 @@ public class AppointmentUtilities {
             String end = SystemUtilities.toUserTime(dbEnd);
 
             //Add active appointments to list
-            Appointment.addWeeklyAppointment(new Appointment(appointmentID, customerID, doctorID, userID, title,
+            Appointment.addWeeklyAppointment(new Appointment(appointmentID, patientID, patientName, doctorID, doctorName, userID, title,
                     description, contact, type, start, end));
         }
 
@@ -230,7 +246,14 @@ public class AppointmentUtilities {
         LocalDate betweenStart = LocalDate.now();
         LocalDate betweenEnd = LocalDate.now().plusMonths(1);
 
-        String query = "SELECT * FROM appointment WHERE start >= '" + betweenStart + "' AND start <= '" + betweenEnd + "'";
+        String query = "SELECT appointment.appointmentId, patient.patientId, doctor.doctorId, user.userId, appointment.title, " +
+                "appointment.description, appointment.contact, appointment.type, appointment.start, appointment.end, " +
+                "patient.patientName, doctor.doctorName FROM appointment INNER JOIN patient ON appointment.patientId = patient.patientId " +
+                "INNER JOIN doctor ON appointment.doctorId = doctor.doctorId " +
+                "INNER JOIN user ON appointment.userId = user.userId " +
+                "WHERE start >= '" + betweenStart + "' AND start <= '" + betweenEnd + "'";
+
+//        String query = "SELECT * FROM appointment WHERE start >= '" + betweenStart + "' AND start <= '" + betweenEnd + "'";
 
         DBQuery.setPreparedStatement(connection, query);
         PreparedStatement ps = DBQuery.getPreparedStatement();
@@ -244,8 +267,10 @@ public class AppointmentUtilities {
         //Retrieve ResultSet values
         while(queryResults.next()) {
             int appointmentID = queryResults.getInt("appointmentId");
-            int customerID = queryResults.getInt("customerId");
+            int patientID = queryResults.getInt("patientId");
+            String patientName = queryResults.getString("patientName");
             int doctorID = queryResults.getInt("doctorId");
+            String doctorName = queryResults.getString("doctorName");
             int userID = queryResults.getInt("userId");
             String title = queryResults.getString("title");
             String description = queryResults.getString("description");
@@ -259,7 +284,7 @@ public class AppointmentUtilities {
             String end = SystemUtilities.toUserTime(dbEnd);
 
             //Add active appointments to list
-            Appointment.addMonthlyAppointment(new Appointment(appointmentID, customerID, doctorID, userID, title,
+            Appointment.addMonthlyAppointment(new Appointment(appointmentID, patientID, patientName, doctorID, doctorName, userID, title,
                     description, contact, type, start, end));
         }
 

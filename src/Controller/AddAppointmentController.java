@@ -1,7 +1,9 @@
 package Controller;
 
+import Model.Doctor;
 import Model.Patient;
 import Utilities.AppointmentUtilities;
+import Utilities.DoctorUtilities;
 import Utilities.PatientUtilities;
 import Utilities.Error;
 import javafx.fxml.FXML;
@@ -13,57 +15,133 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class AddAppointmentController implements Initializable {
-    @FXML
-    private TextField ApptTitleTxt;
-
-    @FXML
-    private TextField ApptDescriptionTxt;
-
-    @FXML
-    private TextField ApptLocationTxt;
-
-    @FXML
-    private TextField ApptTypeTxt;
-
-    @FXML
-    private TextField ApptStartTimeTxt;
-
-    @FXML
-    private TextField ApptEndDateTxt;
-
-    @FXML
-    private TextField ApptStartDateTxt;
-
-    @FXML
-    private TextField ApptEndTimeTxt;
-
-    @FXML
-    private TableView<Patient> CustomerTable;
-
-    @FXML
-    private TableColumn<Patient, String> CustNameCol;
-
-    @FXML
-    private TableColumn<Patient, String> CustAddressCol;
-
-    @FXML
-    private TableColumn<Patient, String> CustPhoneCol;
-
-    @FXML
-    private Button CancelButton;
-
-    @FXML
-    private Button SaveButton;
 
     Stage stage;
     Parent scene;
+
+
+    @FXML
+    private TextField TitleTxt;
+
+    @FXML
+    private TextField DescriptionTxt;
+
+    @FXML
+    private TextField TypeTxt;
+
+    @FXML
+    private TextField StartTimeTxt;
+
+    @FXML
+    private TextField EndDateTxt;
+
+    @FXML
+    private TextField StartDateTxt;
+
+    @FXML
+    private TextField EndTimeTxt;
+
+    @FXML
+    private Button CancelBtn;
+
+    @FXML
+    private Button SaveBtn;
+
+    @FXML
+    private TableView<Patient> PatientTable;
+
+    @FXML
+    private TableColumn<Patient, String> PatientNameCol;
+
+    @FXML
+    private TableColumn<Patient, String> PatientAddressCol;
+
+    @FXML
+    private TableColumn<Patient, String> PatientPhoneCol;
+
+    @FXML
+    private Button ReportsBtn;
+
+    @FXML
+    private Button ExitBtn;
+
+    @FXML
+    private Button HomeBtn;
+
+    @FXML
+    private Button AppointmentsBtn;
+
+    @FXML
+    private Button PatientsBtn;
+
+    @FXML
+    private Button DoctorsBtn;
+
+    @FXML
+    private TableView<Doctor> DoctorTable;
+
+    @FXML
+    private TableColumn<Doctor, String> DoctorNameCol;
+
+    @FXML
+    private TableColumn<Doctor, String> DoctorPhoneCol;
+
+    @FXML
+    private TableColumn<Doctor, String> DoctorEmailCol;
+
+
+    //Navigation menu buttons
+    @FXML
+    void OnClickHome(MouseEvent event) throws IOException {
+        stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+        scene = FXMLLoader.load(getClass().getResource("../View/MainScreen.fxml"));
+        stage.setScene(new Scene(scene));
+        stage.show();
+    }
+
+    @FXML
+    void OnClickAppointments(MouseEvent event) throws IOException {
+        stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+        scene = FXMLLoader.load(getClass().getResource("../View/Appointments.fxml"));
+        stage.setScene(new Scene(scene));
+        stage.show();
+    }
+
+    @FXML
+    void OnClickPatients(MouseEvent event) throws IOException {
+        stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+        scene = FXMLLoader.load(getClass().getResource("../View/Patients.fxml"));
+        stage.setScene(new Scene(scene));
+        stage.show();
+    }
+
+    @FXML
+    void OnClickDoctors(MouseEvent event) throws IOException {
+        stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+        scene = FXMLLoader.load(getClass().getResource("../View/Doctors.fxml"));
+        stage.setScene(new Scene(scene));
+        stage.show();
+    }
+
+    @FXML
+    void OnClickReports(MouseEvent event) throws IOException {
+        stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+        scene = FXMLLoader.load(getClass().getResource("../View/Reports.fxml"));
+        stage.setScene(new Scene(scene));
+        stage.show();
+    }
+
+    @FXML
+    void OnClickExit(MouseEvent event) {
+        Error.exitConfirmation();
+    }
+
 
     @FXML
     void OnClickCancel(MouseEvent event) {
@@ -75,7 +153,7 @@ public class AddAppointmentController implements Initializable {
         alert.showAndWait().filter(result -> result == ButtonType.OK).ifPresent(result -> {
             try {
                 stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-                scene = FXMLLoader.load(getClass().getResource("../View/MainScreen.fxml"));
+                scene = FXMLLoader.load(getClass().getResource("../View/Appointments.fxml"));
                 stage.setScene(new Scene(scene));
                 stage.show();
             } catch (IOException | NullPointerException e) {
@@ -87,23 +165,25 @@ public class AddAppointmentController implements Initializable {
     @FXML
     void OnClickSave(MouseEvent event) throws IOException, SQLException {
         try {
-            String title = ApptTitleTxt.getText();
-            String description = ApptDescriptionTxt.getText();
-            String location = ApptLocationTxt.getText();
-            String type = ApptTypeTxt.getText();
-            String startTime = ApptStartTimeTxt.getText();
-            String startDate = ApptStartDateTxt.getText();
-            String endTime = ApptEndTimeTxt.getText();
-            String endDate = ApptEndDateTxt.getText();
+            String title = TitleTxt.getText();
+            String description = DescriptionTxt.getText();
+            String type = TypeTxt.getText();
+            String startTime = StartTimeTxt.getText();
+            String startDate = StartDateTxt.getText();
+            String endTime = EndTimeTxt.getText();
+            String endDate = EndDateTxt.getText();
 
-            Patient patient = CustomerTable.getSelectionModel().getSelectedItem();
-            int customerID = patient.getPatientID();
-            int doctorID = 1;
-            String customerName = patient.getPatientName();
+            Patient patient = PatientTable.getSelectionModel().getSelectedItem();
+            int patientID = patient.getPatientID();
+
+            Doctor doctor = DoctorTable.getSelectionModel().getSelectedItem();
+            int doctorID = doctor.getDoctorID();
+
+            String patientName = patient.getPatientName();
             String start = startDate + " " + startTime;
             String end = endDate + " " + endTime;
 
-            if (title.isEmpty() || description.isEmpty() || location.isEmpty() || type.isEmpty() ||
+            if (title.isEmpty() || description.isEmpty() || type.isEmpty() ||
                     startTime.isEmpty() || endTime.isEmpty() || startDate.isEmpty() || endDate.isEmpty()) {
 
                 Error.invalidValues();
@@ -119,16 +199,16 @@ public class AddAppointmentController implements Initializable {
                 Error.unableToSchedule();
 
             } else {
-//                AppointmentUtilities.insertAppointment(customerID, doctorID, title, description, customerName, type, start, end);
+                AppointmentUtilities.insertAppointment(patientID, doctorID, title, description, patientName, type, start, end);
 
                 stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-                scene = FXMLLoader.load(getClass().getResource("../View/MainScreen.fxml"));
+                scene = FXMLLoader.load(getClass().getResource("../View/Appointments.fxml"));
                 stage.setScene(new Scene(scene));
                 stage.show();
             }
         } catch (NullPointerException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setContentText("Please select a customer contact");
+            alert.setContentText("Please select a patient and doctor");
             alert.showAndWait();
 
         }
@@ -141,11 +221,18 @@ public class AddAppointmentController implements Initializable {
         try {
             //Clears list of old data
             Patient.allPatients.clear();
+            Doctor.allDoctors.clear();
 
-            CustomerTable.setItems(PatientUtilities.getAllPatients());
-            CustNameCol.setCellValueFactory(new PropertyValueFactory<>("customerName"));
-            CustAddressCol.setCellValueFactory(new PropertyValueFactory<>("address"));
-            CustPhoneCol.setCellValueFactory(new PropertyValueFactory<>("phone"));
+            PatientTable.setItems(PatientUtilities.getAllPatients());
+            PatientNameCol.setCellValueFactory(new PropertyValueFactory<>("patientName"));
+            PatientAddressCol.setCellValueFactory(new PropertyValueFactory<>("address"));
+            PatientPhoneCol.setCellValueFactory(new PropertyValueFactory<>("phone"));
+
+            DoctorTable.setItems(DoctorUtilities.getAllDoctors());
+            DoctorNameCol.setCellValueFactory(new PropertyValueFactory<>("doctorName"));
+            DoctorPhoneCol.setCellValueFactory(new PropertyValueFactory<>("phone"));
+            DoctorEmailCol.setCellValueFactory(new PropertyValueFactory<>("email"));
+
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }

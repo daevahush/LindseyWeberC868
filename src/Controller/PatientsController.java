@@ -3,6 +3,7 @@ package Controller;
 import Model.Patient;
 import Utilities.Error;
 import Utilities.PatientUtilities;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -56,7 +57,7 @@ public class PatientsController implements Initializable {
     private Button DoctorsBtn;
 
     @FXML
-    private TextField searchTxt;
+    private TextField SearchTxt;
 
     @FXML
     private Button AddApptBtn;
@@ -173,10 +174,25 @@ public class PatientsController implements Initializable {
 
     }
 
-    //TODO
+    //Search field
     @FXML
-    void onActionSearch(ActionEvent event) {
+    void onActionSearch(ActionEvent event) throws SQLException {
+        String query = SearchTxt.getText();
+        ObservableList<Patient> filteredPatients = PatientUtilities.lookUpPatient(query);
 
+        if(filteredPatients.size() == 0) {
+            try {
+                int id = Integer.parseInt(query);
+                Patient patient = PatientUtilities.lookUpPatient(id);
+                if(patient != null) {
+                    filteredPatients.add(patient);
+                }
+            } catch(NumberFormatException | SQLException e) {
+                //No results found, empty table will be displayed
+            }
+        }
+
+        PatientTable.setItems(filteredPatients);
     }
 
 

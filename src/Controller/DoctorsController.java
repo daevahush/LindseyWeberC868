@@ -3,6 +3,7 @@ package Controller;
 import Model.Doctor;
 import Utilities.DoctorUtilities;
 import Utilities.Error;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -169,9 +170,25 @@ public class DoctorsController implements Initializable {
         });
     }
 
-    //TODO
+    //Search field
     @FXML
-    void onActionSearch(ActionEvent event) {
+    void onActionSearch(ActionEvent event) throws SQLException {
+        String query = SearchTxt.getText();
+        ObservableList<Doctor> filteredDoctors = DoctorUtilities.lookUpDoctor(query);
+
+        if(filteredDoctors.size() == 0) {
+            try {
+                int id = Integer.parseInt(query);
+                Doctor doctor = DoctorUtilities.lookUpDoctor(id);
+                if(doctor != null) {
+                    filteredDoctors.add(doctor);
+                }
+            } catch(NumberFormatException | SQLException e) {
+                //No results found, empty table will be displayed
+            }
+        }
+
+        DoctorTable.setItems(filteredDoctors);
 
     }
 

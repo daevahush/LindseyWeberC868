@@ -6,7 +6,9 @@ import javafx.collections.ObservableList;
 public class Appointment {
     private int appointmentId;
     private int patientID;
+    private String patientName;
     private int doctorID;
+    private String doctorName;
     private int userId;
     private String title;
     private String description;
@@ -29,11 +31,13 @@ public class Appointment {
         this.totalInMonth = totalInMonth;
     }
 
-    public Appointment(int appointmentId, int patientID, int doctorID, int userId, String title, String description, String contact,
+    public Appointment(int appointmentId, int patientID, String patientName, int doctorID, String doctorName, int userId, String title, String description, String contact,
                        String type, String start, String end) {
         this.appointmentId = appointmentId;
         this.patientID = patientID;
+        this.patientName = patientName;
         this.doctorID = doctorID;
+        this.doctorName = doctorName;
         this.userId = userId;
         this.title = title;
         this.description = description;
@@ -129,6 +133,22 @@ public class Appointment {
 
     public void setEnd(String end) {
         this.end = end;
+    }
+
+    public int getDoctorID() {
+        return doctorID;
+    }
+
+    public void setDoctorID(int doctorID) {
+        this.doctorID = doctorID;
+    }
+
+    public String getDoctorName() {
+        return doctorName;
+    }
+
+    public void setDoctorName(String doctorName) {
+        this.doctorName = doctorName;
     }
 
     public static void addAppointment(Appointment newAppointment) {

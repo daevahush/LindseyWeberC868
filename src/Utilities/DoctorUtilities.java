@@ -4,6 +4,7 @@ import Database.DBConnection;
 import Database.DBQuery;
 import Model.Doctor;
 import Model.User;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -172,6 +173,37 @@ public class DoctorUtilities {
         }
 
         return Doctor.allDoctors;
+    }
+
+    //Search function for Doctors screen to search by ID
+    public static Doctor lookUpDoctor(int doctorID) throws SQLException {
+        ObservableList<Doctor> allDoctors = getAllDoctors();
+
+        for (int i = 0; i < allDoctors.size(); i++) {
+            Doctor doctor = allDoctors.get(i);
+
+            if (doctor.getDoctorID() == doctorID) {
+                return doctor;
+            }
+        }
+        return null;
+    }
+
+    //Search doctors by name
+    public static ObservableList<Doctor> lookUpDoctor(String doctorName) throws SQLException {
+        Doctor.allDoctors.clear();
+
+        ObservableList<Doctor> filteredDoctors = FXCollections.observableArrayList();
+        doctorName = doctorName.toLowerCase();
+
+        for (Doctor doctor : getAllDoctors()) {
+            String name = doctor.getDoctorName().toLowerCase();
+
+            if (name.contains(doctorName)) {
+                filteredDoctors.add(doctor);
+            }
+        }
+        return filteredDoctors;
     }
 
 }

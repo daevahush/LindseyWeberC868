@@ -2,8 +2,10 @@ package Utilities;
 
 import Database.DBConnection;
 import Database.DBQuery;
+import Model.Doctor;
 import Model.Patient;
 import Model.User;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -198,6 +200,37 @@ public class PatientUtilities {
         }
 
         return Patient.allPatients;
+    }
+
+    //Search function for Doctors screen to search by ID
+    public static Patient lookUpPatient(int patientID) throws SQLException {
+        ObservableList<Patient> allPatients = getAllPatients();
+
+        for (int i = 0; i < allPatients.size(); i++) {
+            Patient patient = allPatients.get(i);
+
+            if (patient.getPatientID() == patientID) {
+                return patient;
+            }
+        }
+        return null;
+    }
+
+    //Search doctors by name
+    public static ObservableList<Patient> lookUpPatient(String patientName) throws SQLException {
+        Patient.allPatients.clear();
+
+        ObservableList<Patient> filteredPatients = FXCollections.observableArrayList();
+        patientName = patientName.toLowerCase();
+
+        for (Patient patient : getAllPatients()) {
+            String name = patient.getPatientName().toLowerCase();
+
+            if (name.contains(patientName)) {
+                filteredPatients.add(patient);
+            }
+        }
+        return filteredPatients;
     }
 
 }
