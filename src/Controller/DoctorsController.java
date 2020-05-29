@@ -10,6 +10,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import java.io.IOException;
@@ -178,18 +179,17 @@ public class DoctorsController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
+        //Populate Doctor table with All Doctors
+        try {
+            Doctor.allDoctors.clear();
 
-        //Populate Doctor table with All Doctors TODO uncomment this once doctor utils are up
-//        try {
-//            Doctor.allDoctors.clear();
-//
-//            DoctorTable.setItems(DoctorUtilities.getAllDoctors());
-//            NameCol.setCellValueFactory(new PropertyValueFactory<>("doctorName"));
-//            PhoneCol.setCellValueFactory(new PropertyValueFactory<>("phone"));
-//            EmailCol.setCellValueFactory(new PropertyValueFactory<>("email"));
-//        } catch (SQLException throwables) {
-//            throwables.printStackTrace();
-//        }
+            DoctorTable.setItems(DoctorUtilities.getAllDoctors());
+            NameCol.setCellValueFactory(new PropertyValueFactory<>("doctorName"));
+            PhoneCol.setCellValueFactory(new PropertyValueFactory<>("phone"));
+            EmailCol.setCellValueFactory(new PropertyValueFactory<>("email"));
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
 
     }
 }

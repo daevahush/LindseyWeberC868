@@ -225,18 +225,18 @@ public class AppointmentsController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
 
         //Populate Appointment table with All Appointments TODO adjust the doctor ID to pull name instead and the date column
-        try {
-            Appointment.allAppointments.clear();
-
-            ApptTable.setItems(AppointmentUtilities.getAllAppointment());
-            DateCol.setCellValueFactory(new PropertyValueFactory<>("start"));
-            StartTimeCol.setCellValueFactory(new PropertyValueFactory<>("start"));
-            EndTimeCol.setCellValueFactory(new PropertyValueFactory<>("end"));
-            DoctorCol.setCellValueFactory(new PropertyValueFactory<>("doctorID"));
-            PatientCol.setCellValueFactory(new PropertyValueFactory<>("PatientName"));
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
+//        try {
+//            Appointment.allAppointments.clear();
+//
+//            ApptTable.setItems(AppointmentUtilities.getAllAppointment());
+//            DateCol.setCellValueFactory(new PropertyValueFactory<>("start"));
+//            StartTimeCol.setCellValueFactory(new PropertyValueFactory<>("start"));
+//            EndTimeCol.setCellValueFactory(new PropertyValueFactory<>("end"));
+//            DoctorCol.setCellValueFactory(new PropertyValueFactory<>("doctorID"));
+//            PatientCol.setCellValueFactory(new PropertyValueFactory<>("PatientName"));
+//        } catch (SQLException throwables) {
+//            throwables.printStackTrace();
+//        }
 
     }
 }

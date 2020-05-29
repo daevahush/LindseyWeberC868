@@ -1,15 +1,16 @@
 package Controller;
 
-import Model.*;
-import Utilities.AppointmentUtilities;
+import Utilities.*;
 import Utilities.Error;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import java.io.IOException;
@@ -17,27 +18,25 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
-public class MainScreenController implements Initializable {
+public class AddDoctorController implements Initializable {
     Stage stage;
     Parent scene;
 
-    @FXML
-    private TableView<Appointment> ApptTable;
 
     @FXML
-    private TableColumn<Appointment, String> DateCol;
+    private Button CancelBtn;
 
     @FXML
-    private TableColumn<Appointment, String> StartTimeCol;
+    private Button SaveBtn;
 
     @FXML
-    private TableColumn<Appointment, String> EndTimeCol;
+    private TextField NameTxt;
 
     @FXML
-    private TableColumn<Appointment, String> DoctorCol;
+    private TextField PhoneTxt;
 
     @FXML
-    private TableColumn<Appointment, String> PatientCol;
+    private TextField EmailTxt;
 
     @FXML
     private Button ReportsBtn;
@@ -56,6 +55,7 @@ public class MainScreenController implements Initializable {
 
     @FXML
     private Button DoctorsBtn;
+
 
     //Navigation menu buttons
     @FXML
@@ -103,24 +103,50 @@ public class MainScreenController implements Initializable {
         Error.exitConfirmation();
     }
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
 
-        // TODO change this to pull appointments only for current day
-        //Populate Appointment table with the current day's Appointments
-//        try {
-//            Appointment.allAppointments.clear();
-//
-//            ApptTable.setItems(AppointmentUtilities.getAllAppointment());
-//            DateCol.setCellValueFactory(new PropertyValueFactory<>("start"));
-//            StartTimeCol.setCellValueFactory(new PropertyValueFactory<>("start"));
-//            EndTimeCol.setCellValueFactory(new PropertyValueFactory<>("end"));
-//            DoctorCol.setCellValueFactory(new PropertyValueFactory<>("doctorID"));
-//            PatientCol.setCellValueFactory(new PropertyValueFactory<>("patientName"));
-//        } catch (SQLException throwables) {
-//            throwables.printStackTrace();
-//        }
+    @FXML
+    void OnClickCancel(MouseEvent event) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setContentText("Are you sure you want to go back? " +
+                "Any changes won't be saved");
+
+        alert.showAndWait().filter(result -> result == ButtonType.OK).ifPresent(result -> {
+            try {
+                stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+                scene = FXMLLoader.load(getClass().getResource("../View/Doctors.fxml"));
+                stage.setScene(new Scene(scene));
+                stage.show();
+            } catch(IOException | NullPointerException e) {
+                Error.unexpectedShutDown();
+            }
+        });
+    }
+
+    @FXML
+    void OnClickSave(MouseEvent event) throws SQLException, IOException {
+        String name = NameTxt.getText();
+        String phone = PhoneTxt.getText();
+        String email = EmailTxt.getText();
+
+        if(name.isEmpty() || phone.isEmpty() || email.isEmpty()) {
+
+            Error.invalidValues();
+
+        } else {
+
+            DoctorUtilities.insertDoctor(name, phone, email);
+
+            stage = (Stage)((Button)event.getSource()).getScene().getWindow();
+            scene = FXMLLoader.load(getClass().getResource("../View/Doctors.fxml"));
+            stage.setScene(new Scene(scene));
+            stage.show();
+        }
 
     }
 
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+
+    }
 }

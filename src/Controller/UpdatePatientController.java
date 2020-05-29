@@ -66,7 +66,7 @@ public class UpdatePatientController implements Initializable {
         alert.showAndWait().filter(result -> result == ButtonType.OK).ifPresent(result -> {
             try {
                 stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-                scene = FXMLLoader.load(getClass().getResource("../View/MainScreen.fxml"));
+                scene = FXMLLoader.load(getClass().getResource("../View/Patients.fxml"));
                 stage.setScene(new Scene(scene));
                 stage.show();
             } catch(IOException | NullPointerException e) {

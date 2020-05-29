@@ -3,7 +3,6 @@ package Utilities;
 import Database.DBConnection;
 import Database.DBQuery;
 import Model.Doctor;
-import Model.Patient;
 import Model.User;
 import javafx.collections.ObservableList;
 import java.sql.Connection;
@@ -16,7 +15,7 @@ public class DoctorUtilities {
     static Connection connection = DBConnection.startConnection();
 
     //Get Doctor ID
-    public static int getDoctorID(String customerName, String address, String city) throws SQLException {
+    public static int getDoctorID(String doctorName, String phone) throws SQLException {
         String query = "SELECT doctorId FROM doctor WHERE doctorName = ? && phone = ?;";
 
         //Create prepared statement
@@ -24,8 +23,8 @@ public class DoctorUtilities {
         PreparedStatement ps = DBQuery.getPreparedStatement();
 
         //Key value mappings
-        ps.setString(1, customerName);
-        ps.setInt(2, AddressUtilities.getAddressID(address, city));
+        ps.setString(1, doctorName);
+        ps.setString(2, phone);
 
         //Execute Statement
         ps.execute();
@@ -36,28 +35,29 @@ public class DoctorUtilities {
         //Retrieve ResultSet values
         while(queryResults.next()) {
 
-            return queryResults.getInt("customerId");
+            return queryResults.getInt("doctorId");
         }
 
         return -1;
     }
 
     //Insert new doctor into doctor table
-    public static void insertDoctor(String customerName, int addressID) throws SQLException {
-        String insertStatement = "INSERT INTO customer(customerName, addressId, active, createDate, createdBy, lastUpdateBy) " +
-                "VALUES(?, ?, ?, ?, ?, ?);";
+    public static void insertDoctor(String doctorName, String phone, String email) throws SQLException {
+        String insertStatement = "INSERT INTO doctor(doctorName, phone, email, active, createDate, createdBy, lastUpdateBy) " +
+                "VALUES(?, ?, ?, ?, ?, ?, ?);";
 
         //Create prepared statement
         DBQuery.setPreparedStatement(connection, insertStatement);
         PreparedStatement ps = DBQuery.getPreparedStatement();
 
         //Key value mapping
-        ps.setString(1,customerName);
-        ps.setInt(2,addressID);
-        ps.setInt(3, 1);
-        ps.setString(4,SystemUtilities.getSystemDateTime());
-        ps.setString(5, User.getUserName());
-        ps.setString(6,User.getUserName());
+        ps.setString(1,doctorName);
+        ps.setString(2,phone);
+        ps.setString(3,email);
+        ps.setInt(4, 1);
+        ps.setString(5,SystemUtilities.getSystemDateTime());
+        ps.setString(6, User.getUserName());
+        ps.setString(7,User.getUserName());
 
         //Execute statement
         ps.execute();
@@ -71,19 +71,20 @@ public class DoctorUtilities {
     }
 
     //Update Doctor
-    public static void updateDoctor(int customerID, String customerName, int addressID) throws SQLException {
-        String updateStatement = "UPDATE customer SET customerName = ?, addressId = ?, lastUpdateBy = ?" +
-                "WHERE customerId = ?;";
+    public static void updateDoctor(int doctorID, String doctorName, String phone, String email) throws SQLException {
+        String updateStatement = "UPDATE doctor SET doctorName = ?, phone = ?, email = ?, lastUpdateBy = ?" +
+                "WHERE doctorId = ?;";
 
         //Create prepared statement
         DBQuery.setPreparedStatement(connection, updateStatement);
         PreparedStatement ps = DBQuery.getPreparedStatement();
 
         //Key value mapping
-        ps.setString(1,customerName);
-        ps.setInt(2,addressID);
-        ps.setString(3,User.getUserName());
-        ps.setInt(4,customerID);
+        ps.setString(1,doctorName);
+        ps.setString(2,phone);
+        ps.setString(3,email);
+        ps.setString(4,User.getUserName());
+        ps.setInt(5,doctorID);
 
 
         //Execute statement
@@ -98,15 +99,15 @@ public class DoctorUtilities {
     }
 
     //Delete doctor
-    public static void deleteDoctor(int customerId) throws SQLException {
-        String deleteStatement = "DELETE FROM customer WHERE customerId = ?";
+    public static void deleteDoctor(int doctorID) throws SQLException {
+        String deleteStatement = "DELETE FROM doctor WHERE doctorId = ?";
 
         //Create prepared statement
         DBQuery.setPreparedStatement(connection, deleteStatement);
         PreparedStatement ps = DBQuery.getPreparedStatement();
 
         //Key value mapping
-        ps.setInt(1, customerId);
+        ps.setInt(1, doctorID);
 
         //Execute statement
         ps.execute();
@@ -119,14 +120,9 @@ public class DoctorUtilities {
         }
     }
 
-    //Get Individual doctor to update
-    public static ObservableList<Doctor> getDoctor(int customerId) throws SQLException {
-        String query = "SELECT customer.customerId, customer.customerName, " +
-                "address.addressId, address.address, address.address2, address.postalCode, address.phone, " +
-                "city.cityId, city.city, country.countryId, country.country FROM customer " +
-                "INNER JOIN address ON customer.addressId = address.addressId " +
-                "INNER JOIN city ON address.cityId = city.cityId " +
-                "INNER JOIN country on city.countryId = country.countryId WHERE customerId= " + customerId;
+    //Get Individual doctor to be updated
+    public static ObservableList<Doctor> getDoctor(int doctorId) throws SQLException {
+        String query = "SELECT doctorId, doctorName, phone, email FROM doctor WHERE doctorId= " + doctorId;
 
         DBQuery.setPreparedStatement(connection, query);
         PreparedStatement ps = DBQuery.getPreparedStatement();
@@ -139,33 +135,21 @@ public class DoctorUtilities {
 
         //Retrieve ResultSet values
         while(queryResults.next()) {
-            int customerID = queryResults.getInt("customerId");
-            String customerName = queryResults.getString("customerName");
-            int addressID = queryResults.getInt("addressId");
-            String address = queryResults.getString("address");
-            String address2 = queryResults.getString("address2");
-            int cityID = queryResults.getInt("cityId");
-            String city = queryResults.getString("city");
-            int countryID = queryResults.getInt("countryId");
-            String country = queryResults.getString("country");
-            String postalCode = queryResults.getString("postalCode");
+            int doctorID = queryResults.getInt("doctorId");
+            String doctorName = queryResults.getString("doctorName");
             String phone = queryResults.getString("phone");
+            String email = queryResults.getString("email");
 
             //Add active customers to list
-            Patient.addUpdatePatient(new Patient(customerID, customerName, addressID, address, address2,
-                    cityID, city, countryID, country, postalCode, phone));
+            Doctor.addUpdateDoctor(new Doctor(doctorID, doctorName, phone, email));
         }
 
         return Doctor.updateDoctor;
     }
 
+    //Get all existing active doctors
     public static ObservableList<Doctor> getAllDoctors() throws SQLException {
-        String query = "SELECT customer.customerId, customer.customerName, " +
-                "address.addressId, address.address, address.address2, address.postalCode, address.phone, " +
-                "city.cityId, city.city, country.countryId, country.country FROM customer " +
-                "INNER JOIN address ON customer.addressId = address.addressId " +
-                "INNER JOIN city ON address.cityId = city.cityId " +
-                "INNER JOIN country on city.countryId = country.countryId ;";
+        String query = "SELECT doctorId, doctorName, phone, email FROM doctor;";
 
         DBQuery.setPreparedStatement(connection, query);
         PreparedStatement ps = DBQuery.getPreparedStatement();
@@ -178,21 +162,13 @@ public class DoctorUtilities {
 
         //Retrieve ResultSet values
         while(queryResults.next()) {
-            int customerID = queryResults.getInt("customerId");
-            String customerName = queryResults.getString("customerName");
-            int addressID = queryResults.getInt("addressId");
-            String address = queryResults.getString("address");
-            String address2 = queryResults.getString("address2");
-            int cityID = queryResults.getInt("cityId");
-            String city = queryResults.getString("city");
-            int countryID = queryResults.getInt("countryId");
-            String country = queryResults.getString("country");
-            String postalCode = queryResults.getString("postalCode");
+            int doctorID = queryResults.getInt("doctorId");
+            String doctorName = queryResults.getString("doctorName");
             String phone = queryResults.getString("phone");
+            String email = queryResults.getString("email");
 
-            //Add active appointments to list
-            Patient.addPatient(new Patient(customerID, customerName, addressID, address, address2,
-                    cityID, city, countryID, country, postalCode, phone));
+            //Add active doctors to list
+            Doctor.addDoctor(new Doctor(doctorID, doctorName, phone, email));
         }
 
         return Doctor.allDoctors;
